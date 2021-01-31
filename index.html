@@ -176,272 +176,9 @@
 <p>class A : public B;</p>
 <p>A 类称为子类 或 派生类</p>
 <p>B 类称为父类 或 基类</p>
-<p><strong>派生类中的成员，包含两大部分</strong>：</p>
-<p>一类是从基类继承过来的，一类是自己增加的成员。</p>
-<p>从基类继承过过来的表现其共性，而新增的成员体现了其个性。</p>
-<h4 id="继承方式"><a href="#继承方式" class="headerlink" title="继承方式"></a>继承方式</h4><p>继承的语法：<code>class 子类 : 继承方式 父类</code></p>
-<p><strong>继承方式一共有三种：</strong></p>
-<ul>
-<li>公共继承：公共依然是公共，保护依然是保护，私有不可访问</li>
-<li>保护继承：公共变保护，保护依然是保护，私有不可访问</li>
-<li>私有继承：公共和保护都变私有，私有不可访问</li>
-</ul>
-<blockquote>
-<p>父类中所有非静态成员属性都会被子类继承下去,父类中私有成员也是被子类继承下去了，只是由编译器给隐藏后访问不到</p>
-</blockquote>
-<blockquote>
-<p>继承中 先调用父类构造函数，再调用子类构造函数，析构顺序与构造相反</p>
-</blockquote>
-<h4 id="继承同名成员处理方式"><a href="#继承同名成员处理方式" class="headerlink" title="继承同名成员处理方式"></a>继承同名成员处理方式</h4><ul>
-<li>访问子类同名成员 直接访问即可</li>
-<li>访问父类同名成员 需要加作用域</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当子类与父类拥有同名的成员函数，子类会隐藏父类中所有版本的同名成员函数</span></span><br><span class="line"><span class="comment">//如果想访问父类中被隐藏的同名成员函数，需要加父类的作用域</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Son s;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Son下的m_A = &quot;</span> &lt;&lt; s.m_A &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Base下的m_A = &quot;</span> &lt;&lt; s.Base::m_A &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	s.func();</span><br><span class="line">	s.Base::func();</span><br><span class="line">	s.Base::func(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol>
-<li>子类对象可以直接访问到子类中同名成员</li>
-<li>子类对象加作用域可以访问到父类同名成员</li>
-<li>当子类与父类拥有同名的成员函数，子类会隐藏父类中同名成员函数，加作用域可以访问到父类中同名函数</li>
-</ol>
-<h4 id="继承同名静态成员处理方式"><a href="#继承同名静态成员处理方式" class="headerlink" title="继承同名静态成员处理方式"></a>继承同名静态成员处理方式</h4><p>静态成员和非静态成员出现同名，处理方式一致</p>
-<ul>
-<li>访问子类同名成员 直接访问即可</li>
-<li>访问父类同名成员 需要加作用域</li>
-</ul>
-<h4 id="多继承语法"><a href="#多继承语法" class="headerlink" title="多继承语法"></a>多继承语法</h4><p>C++允许<strong>一个类继承多个类</strong></p>
-<p>语法：<code>class 子类 ：继承方式 父类1 ， 继承方式 父类2...</code></p>
-<p>多继承可能会引发父类中有同名成员出现，需要加作用域区分</p>
-<ul>
-<li><strong>C++实际开发中不建议用多继承</strong></li>
-</ul>
-<h4 id="菱形继承"><a href="#菱形继承" class="headerlink" title="菱形继承"></a>菱形继承</h4><p><strong>菱形继承概念：</strong></p>
-<p> 两个派生类继承同一个基类</p>
-<p> 又有某个类同时继承者两个派生类</p>
-<p> 这种继承被称为菱形继承，或者钻石继承</p>
-<ul>
-<li>菱形继承带来的主要问题是子类继承两份相同的数据，导致资源浪费以及毫无意义</li>
-<li>利用虚继承可以解决菱形继承问题</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">继承前加<span class="keyword">virtual</span>关键字后，变为虚继承</span><br></pre></td></tr></table></figure>
-<h4 id="多态的基本概念"><a href="#多态的基本概念" class="headerlink" title="多态的基本概念"></a>多态的基本概念</h4><p><strong>多态是C++面向对象三大特性之一</strong></p>
-<p>多态分为两类</p>
-<ul>
-<li>静态多态: 函数重载 和 运算符重载属于静态多态，复用函数名</li>
-<li>动态多态: 派生类和虚函数实现运行时多态</li>
-</ul>
-<p>静态多态和动态多态区别：</p>
-<ul>
-<li>静态多态的函数地址早绑定 - 编译阶段确定函数地址</li>
-<li>动态多态的函数地址晚绑定 - 运行阶段确定函数地址</li>
-</ul>
-<p>下面通过案例进行讲解多态</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">//Speak函数就是虚函数</span></span><br><span class="line">	<span class="comment">//函数前面加上virtual关键字，变成虚函数，那么编译器在编译的时候就不能确定函数调用了。</span></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">speak</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;动物在说话&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> :</span><span class="keyword">public</span> Animal</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">speak</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;小猫在说话&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> :</span><span class="keyword">public</span> Animal</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">speak</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;小狗在说话&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//我们希望传入什么对象，那么就调用什么对象的函数</span></span><br><span class="line"><span class="comment">//如果函数地址在编译阶段就能确定，那么静态联编</span></span><br><span class="line"><span class="comment">//如果函数地址在运行阶段才能确定，就是动态联编</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DoSpeak</span><span class="params">(Animal &amp; animal)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	animal.speak();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//多态满足条件： </span></span><br><span class="line"><span class="comment">//1、有继承关系</span></span><br><span class="line"><span class="comment">//2、子类重写父类中的虚函数</span></span><br><span class="line"><span class="comment">//多态使用：</span></span><br><span class="line"><span class="comment">//父类指针或引用指向子类对象</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Cat cat;</span><br><span class="line">	DoSpeak(cat);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	Dog dog;</span><br><span class="line">	DoSpeak(dog);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>总结：</p>
-<p>多态满足条件</p>
-<ul>
-<li>有继承关系</li>
-<li>子类重写父类中的虚函数</li>
-</ul>
-<p>多态使用条件</p>
-<ul>
-<li>父类指针或引用指向子类对象</li>
-</ul>
-<p>重写：函数返回值类型 函数名 参数列表 完全一致称为重写</p>
-<blockquote>
-<p>C++开发提倡利用多态设计程序架构，因为多态优点很多</p>
-</blockquote>
-<h4 id="纯虚函数和抽象类"><a href="#纯虚函数和抽象类" class="headerlink" title="纯虚函数和抽象类"></a>纯虚函数和抽象类</h4><p>在多态中，通常父类中虚函数的实现是毫无意义的，主要都是调用子类重写的内容</p>
-<p>因此可以将虚函数改为<strong>纯虚函数</strong></p>
-<p>纯虚函数语法：<code>virtual 返回值类型 函数名 （参数列表）= 0 ;</code></p>
-<p>当类中有了纯虚函数，这个类也称为抽象类</p>
-<p><strong>抽象类特点</strong>：</p>
-<ul>
-<li>无法实例化对象</li>
-<li>子类必须重写抽象类中的纯虚函数，否则也属于抽象类</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">//纯虚函数</span></span><br><span class="line">	<span class="comment">//类中只要有一个纯虚函数就称为抽象类</span></span><br><span class="line">	<span class="comment">//抽象类无法实例化对象</span></span><br><span class="line">	<span class="comment">//子类必须重写父类中的纯虚函数，否则也属于抽象类</span></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son</span> :</span><span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;func调用&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Base * base = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="comment">//base = new Base; // 错误，抽象类无法实例化对象</span></span><br><span class="line">	base = <span class="keyword">new</span> Son;</span><br><span class="line">	base-&gt;func();</span><br><span class="line">	<span class="keyword">delete</span> base;<span class="comment">//记得销毁</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="虚析构和纯虚析构"><a href="#虚析构和纯虚析构" class="headerlink" title="虚析构和纯虚析构"></a>虚析构和纯虚析构</h4><p>多态使用时，如果子类中有属性开辟到堆区，那么父类指针在释放时无法调用到子类的析构代码</p>
-<p>解决方式：将父类中的析构函数改为<strong>虚析构</strong>或者<strong>纯虚析构</strong></p>
-<p>虚析构和纯虚析构共性：</p>
-<ul>
-<li>可以解决父类指针释放子类对象</li>
-<li>都需要有具体的函数实现</li>
-</ul>
-<p>虚析构和纯虚析构区别：</p>
-<ul>
-<li>如果是纯虚析构，该类属于抽象类，无法实例化对象</li>
-</ul>
-<p>虚析构语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virtual ~类名()&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>纯虚析构语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">virtual ~类名() &#x3D; 0;</span><br><span class="line">类名::~类名()&#123;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">	Animal()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Animal 构造函数调用！&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Speak</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//析构函数加上virtual关键字，变成虚析构函数</span></span><br><span class="line">	<span class="comment">//virtual ~Animal()</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	cout &lt;&lt; &quot;Animal虚析构函数调用！&quot; &lt;&lt; endl;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="keyword">virtual</span> ~Animal() = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Animal::~Animal()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Animal 纯虚析构函数调用！&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//和包含普通纯虚函数的类一样，包含了纯虚析构函数的类也是一个抽象类。不能够被实例化。</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> :</span> <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Cat(<span class="built_in">string</span> name)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Cat构造函数调用！&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		m_Name = <span class="keyword">new</span> <span class="built_in">string</span>(name);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Speak</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; *m_Name &lt;&lt;  <span class="string">&quot;小猫在说话!&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	~Cat()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Cat析构函数调用!&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>-&gt;m_Name != <span class="literal">NULL</span>) &#123;</span><br><span class="line">			<span class="keyword">delete</span> m_Name;</span><br><span class="line">			m_Name = <span class="literal">NULL</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">string</span> *m_Name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Animal *animal = <span class="keyword">new</span> Cat(<span class="string">&quot;Tom&quot;</span>);</span><br><span class="line">	animal-&gt;Speak();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//通过父类指针去释放，会导致子类对象可能清理不干净，造成内存泄漏</span></span><br><span class="line">	<span class="comment">//怎么解决？给基类增加一个虚析构函数</span></span><br><span class="line">	<span class="comment">//虚析构函数就是用来解决通过父类指针释放子类对象</span></span><br><span class="line">	<span class="keyword">delete</span> animal;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>虚析构或纯虚析构就是用来解决通过父类指针释放子类对象</p>
-</li>
-<li><p>如果子类中没有堆区数据，可以不写为虚析构或纯虚析构</p>
-</li>
-<li><p>拥有纯虚析构函数的类也属于抽象类</p>
-</li>
-</ol>
-<h2 id="5-文件操作"><a href="#5-文件操作" class="headerlink" title="5 文件操作"></a>5 文件操作</h2><p>程序运行时产生的数据都属于临时数据，程序一旦运行结束都会被释放</p>
-<p>通过<strong>文件可以将数据持久化</strong></p>
-<p>C++中对文件操作需要包含头文件 &lt; fstream &gt;</p>
-<p>文件类型分为两种：</p>
-<ol>
-<li><strong>文本文件</strong> - 文件以文本的<strong>ASCII码</strong>形式存储在计算机中</li>
-<li><strong>二进制文件</strong> - 文件以文本的<strong>二进制</strong>形式存储在计算机中，用户一般不能直接读懂它们</li>
-</ol>
-<p>操作文件的三大类:</p>
-<ol>
-<li>ofstream：写操作</li>
-<li>ifstream： 读操作</li>
-<li>fstream ： 读写操作</li>
-</ol>
-<h3 id="文本文件"><a href="#文本文件" class="headerlink" title="文本文件"></a>文本文件</h3><h4 id="写文件"><a href="#写文件" class="headerlink" title="写文件"></a>写文件</h4><p>写文件步骤如下：</p>
-<ol>
-<li><p>包含头文件</p>
-<p>#include <fstream></p>
-</li>
-<li><p>创建流对象</p>
-<p>ofstream ofs;</p>
-</li>
-<li><p>打开文件</p>
-<p>ofs.open(“文件路径”,打开方式);</p>
-</li>
-<li><p>写数据</p>
-<p>ofs &lt;&lt; “写入的数据”;</p>
-</li>
-<li><p>关闭文件</p>
-<p>ofs.close();</p>
-</li>
-</ol>
-<p>文件打开方式：</p>
-<table>
-<thead>
-<tr>
-<th>打开方式</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ios::in</td>
-<td>为读文件而打开文件</td>
-</tr>
-<tr>
-<td>ios::out</td>
-<td>为写文件而打开文件</td>
-</tr>
-<tr>
-<td>ios::ate</td>
-<td>初始位置：文件尾</td>
-</tr>
-<tr>
-<td>ios::app</td>
-<td>追加方式写文件</td>
-</tr>
-<tr>
-<td>ios::trunc</td>
-<td>如果文件存在先删除，再创建</td>
-</tr>
-<tr>
-<td>ios::binary</td>
-<td>二进制方式</td>
-</tr>
-</tbody></table>
-<p><strong>注意：</strong> 文件打开方式可以配合使用，利用|操作符</p>
-<p><strong>例如：</strong>用二进制方式写文件 <code>ios::binary | ios:: out</code></p>
-<p><strong>示例：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ofstream ofs;</span><br><span class="line">	ofs.open(<span class="string">&quot;test.txt&quot;</span>, ios::out);</span><br><span class="line"></span><br><span class="line">	ofs &lt;&lt; <span class="string">&quot;姓名：张三&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	ofs &lt;&lt; <span class="string">&quot;性别：男&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	ofs &lt;&lt; <span class="string">&quot;年龄：18&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	ofs.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>总结：</p>
-<ul>
-<li>文件操作必须包含头文件 fstream</li>
-<li>读文件可以利用 ofstream ，或者fstream类</li>
-<li>打开文件时候需要指定操作文件的路径，以及打开方式</li>
-<li>利用&lt;&lt;可以向文件中写数据</li>
-<li>操作完毕，要关闭文件</li>
-</ul>
-<h4 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h4><p>读文件与写文件步骤相似，但是读取方式相对于比较多</p>
-<p>读文件步骤如下：</p>
-<ol>
-<li><p>包含头文件</p>
-<p>#include <fstream></p>
-</li>
-<li><p>创建流对象</p>
-<p>ifstream ifs;</p>
-</li>
-<li><p>打开文件并判断文件是否打开成功</p>
-<p>ifs.open(“文件路径”,打开方式);</p>
-</li>
-<li><p>读数据</p>
-<p>四种方式读取</p>
-</li>
-<li><p>关闭文件</p>
-<p>ifs.close();</p>
-</li>
-</ol>
-<p><strong>示例：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ifstream ifs;</span><br><span class="line">	ifs.open(<span class="string">&quot;test.txt&quot;</span>, ios::in);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!ifs.is_open())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;文件打开失败&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//第一种方式</span></span><br><span class="line">	<span class="comment">//char buf[1024] = &#123; 0 &#125;;</span></span><br><span class="line">	<span class="comment">//while (ifs &gt;&gt; buf)</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	cout &lt;&lt; buf &lt;&lt; endl;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//第二种</span></span><br><span class="line">	<span class="comment">//char buf[1024] = &#123; 0 &#125;;</span></span><br><span class="line">	<span class="comment">//while (ifs.getline(buf,sizeof(buf)))</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	cout &lt;&lt; buf &lt;&lt; endl;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//第三种</span></span><br><span class="line">	<span class="comment">//string buf;</span></span><br><span class="line">	<span class="comment">//while (getline(ifs, buf))</span></span><br><span class="line">	<span class="comment">//&#123;</span></span><br><span class="line">	<span class="comment">//	cout &lt;&lt; buf &lt;&lt; endl;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">char</span> c;</span><br><span class="line">	<span class="keyword">while</span> ((c = ifs.get()) != EOF)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; c;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ifs.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>总结：</p>
-<ul>
-<li>读文件可以利用 ifstream ，或者fstream类</li>
-<li>利用is_open函数可以判断文件是否打开成功</li>
-<li>close 关闭文件</li>
-</ul>
-<h3 id="二进制文件"><a href="#二进制文件" class="headerlink" title="二进制文件"></a>二进制文件</h3><p>以二进制的方式对文件进行读写操作</p>
-<p>打开方式要指定为 ios::binary</p>
-<h4 id="写文件-1"><a href="#写文件-1" class="headerlink" title="写文件"></a>写文件</h4><p>二进制方式写文件主要利用流对象调用成员函数write</p>
-<p>函数原型 ：<code>ostream&amp; write(const char * buffer,int len);</code></p>
-<p>参数解释：字符指针buffer指向内存中一段存储空间。len是读写的字节数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">char</span> m_Name[<span class="number">64</span>];</span><br><span class="line">	<span class="keyword">int</span> m_Age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//二进制文件  写文件</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//1、包含头文件</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//2、创建输出流对象</span></span><br><span class="line">	<span class="function">ofstream <span class="title">ofs</span><span class="params">(<span class="string">&quot;person.txt&quot;</span>, ios::out | ios::binary)</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//3、打开文件</span></span><br><span class="line">	<span class="comment">//ofs.open(&quot;person.txt&quot;, ios::out | ios::binary);</span></span><br><span class="line"></span><br><span class="line">	Person p = &#123;<span class="string">&quot;张三&quot;</span>  , <span class="number">18</span>&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//4、写文件</span></span><br><span class="line">	ofs.write((<span class="keyword">const</span> <span class="keyword">char</span> *)&amp;p, <span class="keyword">sizeof</span>(p));</span><br><span class="line"></span><br><span class="line">	<span class="comment">//5、关闭文件</span></span><br><span class="line">	ofs.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li>文件输出流对象 可以通过write函数，以二进制方式写数据</li>
-</ul>
-<h4 id="读文件-1"><a href="#读文件-1" class="headerlink" title="读文件"></a>读文件</h4><p>二进制方式读文件主要利用流对象调用成员函数read</p>
-<p>函数原型：<code>istream&amp; read(char *buffer,int len);</code></p>
-<p>参数解释：字符指针buffer指向内存中一段存储空间。len是读写的字节数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">char</span> m_Name[<span class="number">64</span>];</span><br><span class="line">	<span class="keyword">int</span> m_Age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">ifstream <span class="title">ifs</span><span class="params">(<span class="string">&quot;person.txt&quot;</span>, ios::in | ios::binary)</span></span>;</span><br><span class="line">	<span class="keyword">if</span> (!ifs.is_open())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;文件打开失败&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Person p;</span><br><span class="line">	ifs.read((<span class="keyword">char</span> *)&amp;p, <span class="keyword">sizeof</span>(p));</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;姓名： &quot;</span> &lt;&lt; p.m_Name &lt;&lt; <span class="string">&quot; 年龄： &quot;</span> &lt;&lt; p.m_Age &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>文件输入流对象 可以通过read函数，以二进制方式读数据</p>
-</li>
-<li><p>文件操作必须包含头文件 fstream</p>
-</li>
-<li><p>读文件可以利用 ofstream ，或者fstream类</p>
-</li>
-<li><p>打开文件时候需要指定操作文件的路径，以及打开方式</p>
-</li>
-<li><p>利用&lt;&lt;可以向文件中写数据</p>
-</li>
-<li><p>操作完毕，要关闭文件</p>
-</li>
-</ul>
-<h4 id="读文件-2"><a href="#读文件-2" class="headerlink" title="读文件"></a>读文件</h4><p>读文件与写文件步骤相似，但是读取方式相对于比较多</p>
-<p>读文件步骤如下：</p>
-<ol>
-<li><p>包含头文件</p>
-<p>#include <fstream></p>
-</li>
-<li><p>创建流对象</p>
-<p>ifstream ifs;</p>
-</li>
-<li><p>打开文件并判断文件是否打开成功</p>
-<p>ifs.open(“文件路径”,打开方式);</p>
-</li>
-<li><p>读数据</p>
-<p>四种方式读取</p>
-</li>
-<li><p>关闭文件</p>
-<p>ifs.close();</p>
-</li>
-</ol>
-<h4 id="写文件-2"><a href="#写文件-2" class="headerlink" title="写文件"></a>写文件</h4><p>二进制方式写文件主要利用流对象调用成员函数write</p>
-<p>函数原型 ：<code>ostream&amp; write(const char * buffer,int len);</code></p>
-<p>参数解释：字符指针buffer指向内存中一段存储空间。len是读写的字节数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">char</span> m_Name[<span class="number">64</span>];</span><br><span class="line">	<span class="keyword">int</span> m_Age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//二进制文件  写文件</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//1、包含头文件</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//2、创建输出流对象</span></span><br><span class="line">	<span class="function">ofstream <span class="title">ofs</span><span class="params">(<span class="string">&quot;person.txt&quot;</span>, ios::out | ios::binary)</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//3、打开文件</span></span><br><span class="line">	<span class="comment">//ofs.open(&quot;person.txt&quot;, ios::out | ios::binary);</span></span><br><span class="line"></span><br><span class="line">	Person p = &#123;<span class="string">&quot;张三&quot;</span>  , <span class="number">18</span>&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//4、写文件</span></span><br><span class="line">	ofs.write((<span class="keyword">const</span> <span class="keyword">char</span> *)&amp;p, <span class="keyword">sizeof</span>(p));</span><br><span class="line"></span><br><span class="line">	<span class="comment">//5、关闭文件</span></span><br><span class="line">	ofs.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	test01();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总结：</p>
-<ul>
-<li>文件输出流对象 可以通过write函数，以二进制方式写数据</li>
-</ul>
-
+        
+          <a class="article-more-a" href="/2021/01/31/2021-01-31-2021.1.31-C++%E5%91%A8%E6%8A%A5/#more">more >></a>
+        
       
 
       
@@ -465,6 +202,228 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/01/31/2021-01-31-2021.1.31-C++%E5%91%A8%E6%8A%A5/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-numpy" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/31/numpy/">2021.1.31 C++周报</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/31/numpy/" class="archive-article-date">
+  	<time datetime="2021-01-31T15:03:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="numpy"><a href="#numpy" class="headerlink" title="numpy"></a>numpy</h2><ul>
+<li>做科学计算的基础库，重在数值计算，也是大部分pyhton科学计算库的基础库，多用于在大型、多维数组上执行数值运算</li>
+</ul>
+<h3 id="数组的创建"><a href="#数组的创建" class="headerlink" title="数组的创建"></a>数组的创建</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">t1=np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">t2=np.array(<span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line">t3=np.arange(<span class="number">4</span>,<span class="number">10</span>,<span class="number">2</span>)</span><br><span class="line">print(t1)</span><br><span class="line">print(<span class="built_in">type</span>(t1))</span><br><span class="line">print(t2)</span><br><span class="line">print(<span class="built_in">type</span>(t2))</span><br><span class="line">print(t3)</span><br><span class="line">print(<span class="built_in">type</span>(t3))</span><br><span class="line">print(t3.dtype)</span><br><span class="line">t4=np.array(<span class="built_in">range</span>(<span class="number">1</span>,<span class="number">4</span>),dtype=<span class="string">&quot;int64&quot;</span>)</span><br><span class="line">print(t4.dtype)</span><br><span class="line"></span><br><span class="line">t5=np.array([<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>],dtype=<span class="built_in">bool</span>)</span><br><span class="line">print(t5.dtype)</span><br><span class="line"></span><br><span class="line"><span class="comment">#调整数据类型</span></span><br><span class="line">t6=t5.astype(<span class="string">&quot;i1&quot;</span>)</span><br><span class="line">print(t6.dtype)</span><br><span class="line"></span><br><span class="line"><span class="comment">#numpy中的小数</span></span><br><span class="line">t7=np.array([random.random() <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)])</span><br><span class="line">print(t7)</span><br><span class="line">print(t7.dtype)</span><br><span class="line"></span><br><span class="line">t8=np.<span class="built_in">round</span>(t7,<span class="number">2</span>)<span class="comment">#取小数</span></span><br><span class="line">print(t8)</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[1 2 3]</span><br><span class="line">&lt;class &#39;numpy.ndarray&#39;&gt;</span><br><span class="line">[0 1 2 3 4 5 6 7 8 9]</span><br><span class="line">&lt;class &#39;numpy.ndarray&#39;&gt;</span><br><span class="line">[4 6 8]</span><br><span class="line">&lt;class &#39;numpy.ndarray&#39;&gt;</span><br><span class="line">int32</span><br><span class="line">int64</span><br><span class="line">bool</span><br><span class="line">int8</span><br><span class="line">[0.42339118 0.94938902 0.92727187 0.23014068 0.23140282 0.38809831</span><br><span class="line"> 0.99034156 0.69481699 0.7831722  0.07743174]</span><br><span class="line">float64</span><br><span class="line">[0.42 0.95 0.93 0.23 0.23 0.39 0.99 0.69 0.78 0.08]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t1.shape#判断是几维数组</span><br><span class="line">t1.reshape#改变数组形状,结果是返回值，不会改变原数组</span><br><span class="line"></span><br><span class="line">t1+2直接和数值运算，每个数都加一个2</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当两个数组形状一样时，可以直接用运算符相加</li>
+<li>当两个数组形状不一样时，可以在某些维度计算</li>
+<li>当二维数组组成的面和三维数组的某一个面相符合时就能计算</li>
+</ul>
+<blockquote>
+<p>广播原则</p>
+</blockquote>
+<h3 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.loadtxt(frame,dtype=np.<span class="built_in">float</span>,delimiter=<span class="literal">None</span>,skiprows=<span class="number">0</span>,usecols=<span class="literal">None</span>,unpack=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>上面给出了loadtxt所有的关键字参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 首先给出最简单的loadtxt的代码,实际上就是直接写文件名, 其他关键字参数都是默认的.</span></span><br><span class="line">a = np.loadtxt(<span class="string">&#x27;./data/test.txt&#x27;</span>)</span><br><span class="line">print(a)  <span class="comment"># a为浮点数的原因为Python默认的数字的数据类型为双精度浮点数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[[ <span class="number">1.</span>  <span class="number">2.</span>  <span class="number">3.</span>  <span class="number">4.</span>]</span><br><span class="line"> [ <span class="number">2.</span>  <span class="number">3.</span>  <span class="number">4.</span>  <span class="number">5.</span>]</span><br><span class="line"> [ <span class="number">3.</span>  <span class="number">4.</span>  <span class="number">5.</span>  <span class="number">6.</span>]</span><br><span class="line"> [ <span class="number">4.</span>  <span class="number">5.</span>  <span class="number">6.</span>  <span class="number">7.</span>]]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里的skiprows是指跳过前1行, 如果设置skiprows=2, 就会跳过前两行,数据类型设置为整形.</span></span><br><span class="line">a = np.loadtxt(<span class="string">&#x27;./data/test.txt&#x27;</span>, skiprows=<span class="number">1</span>, dtype=<span class="built_in">int</span>)</span><br><span class="line">print(a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[[<span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"> [<span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span>]</span><br><span class="line"> [<span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span>]]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里的comment的是指, 如果行的开头为#就会跳过该行</span></span><br><span class="line">a = np.loadtxt(<span class="string">&#x27;./data/test1.txt&#x27;</span>, dtype=<span class="built_in">int</span>, skiprows=<span class="number">1</span>, comments=<span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">print(a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]</span><br><span class="line"> [<span class="number">4</span> <span class="number">5</span> <span class="number">6</span>]</span><br><span class="line"> [<span class="number">7</span> <span class="number">8</span> <span class="number">9</span>]]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里的usecols是指只使用0,2两列, unpack是指会把每一列当成一个向量输出, 而不是合并在一起。</span></span><br><span class="line">(a, b) = np.loadtxt(<span class="string">&#x27;./data/test2.txt&#x27;</span>, dtype=<span class="built_in">int</span>, skiprows=<span class="number">1</span>, comments=<span class="string">&#x27;#&#x27;</span>, delimiter=<span class="string">&#x27;,&#x27;</span>, usecols=(<span class="number">0</span>, <span class="number">2</span>), unpack=<span class="literal">True</span>)</span><br><span class="line">print(a, b)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[<span class="number">1</span> <span class="number">4</span> <span class="number">7</span>] [<span class="number">3</span> <span class="number">6</span> <span class="number">9</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="转置"><a href="#转置" class="headerlink" title="转置"></a>转置</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">t.swapaxes(<span class="number">1</span>,<span class="number">0</span>)</span><br><span class="line">t.transpose()</span><br><span class="line">t.T</span><br></pre></td></tr></table></figure>
+<p>以上三种方法都可以实现二维数组的转置效果</p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">print(np.argmin(A))<span class="comment">#最小值索引</span></span><br><span class="line">print(np.argmax(A))<span class="comment">#最大值索引</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#取行</span></span><br><span class="line">print(t2[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#取连续多行</span></span><br><span class="line">print(t2[<span class="number">2</span>:])</span><br><span class="line"></span><br><span class="line"><span class="comment">#取不连续多行</span></span><br><span class="line">print(t2[[<span class="number">2</span>,<span class="number">7</span>,<span class="number">10</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment">#取列</span></span><br><span class="line">print(t2[<span class="number">1</span>,:])</span><br><span class="line">print(t2[<span class="number">2</span>:,:])</span><br><span class="line">print(t2[[<span class="number">2</span>,<span class="number">9</span>,<span class="number">10</span>],:])</span><br><span class="line"></span><br><span class="line"><span class="comment">#取连续多列</span></span><br><span class="line">print(t2[:,<span class="number">2</span>:])</span><br><span class="line"></span><br><span class="line"><span class="comment">#取不连续多列</span></span><br><span class="line">print(t2[:,[<span class="number">0</span>,<span class="number">2</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment">#取值</span></span><br><span class="line">a=t2[<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">print(a)</span><br><span class="line"></span><br><span class="line"><span class="comment">#取多行和多列</span></span><br><span class="line">b=t2[<span class="number">2</span>:<span class="number">5</span>,<span class="number">1</span>:<span class="number">4</span>]</span><br><span class="line">print(b)</span><br><span class="line"></span><br><span class="line"><span class="comment">#取多个不相邻的点</span></span><br><span class="line"><span class="comment">#结果是（0，0）（2，1）（2，3）的点上的值</span></span><br><span class="line">c =t2[[<span class="number">0</span>,<span class="number">2</span>,<span class="number">2</span>],[<span class="number">0</span>,<span class="number">1</span>,<span class="number">3</span>]]</span><br><span class="line">print(c)</span><br></pre></td></tr></table></figure>
+<h3 id="值的修改"><a href="#值的修改" class="headerlink" title="值的修改"></a>值的修改</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#修改值</span></span><br><span class="line"><span class="comment">#布尔索引</span></span><br><span class="line">t2[t2&lt;<span class="number">10</span>]=<span class="number">3</span> <span class="comment">#把小于10的值全替换成3</span></span><br><span class="line"></span><br><span class="line">np.where(t&lt;<span class="number">10</span>,<span class="number">0</span>,<span class="number">10</span>)<span class="comment">#小于10的赋值0，否则替换为10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#裁剪clip</span></span><br><span class="line">t2.clip(<span class="number">10</span>,<span class="number">17</span>)<span class="comment">#把小于10的替换成10，大于17的替换成17</span></span><br></pre></td></tr></table></figure>
+<h3 id="nan和inf"><a href="#nan和inf" class="headerlink" title="nan和inf"></a>nan和inf</h3><p>nan：not a number表示不是一个数字</p>
+<ul>
+<li>当我们读取本地的文件作为float的时候，如果有缺失，就会出现nan</li>
+<li>当我们做了一个不合适的计算的时候（比如无穷大（inf）减去无穷大）</li>
+</ul>
+<p>inf：infinity 表示正无穷</p>
+<ul>
+<li>一个数字除以0</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a=np.inf</span><br><span class="line">a=np.nan</span><br></pre></td></tr></table></figure>
+<ul>
+<li>两个nan是不相等的</li>
+<li>np.nan!=np.nan 返回True</li>
+<li>利用以上特性判断数组中nan的个数</li>
+</ul>
+<pre><code>np.count_nonzero(t2!=t2)#把等于nan的数统计出个数</code></pre>
+<ul>
+<li><p>np.isnan判断nan</p>
+<p>  np.count_nonzero(np.isnan(t2))#作用同上</p>
+</li>
+<li><p>nan和任何值计算都为nan</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">t2.<span class="built_in">sum</span>()</span><br><span class="line"><span class="comment">#nan</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#axis可以为0和1来计算行和列的和，防止结果为nan</span></span><br><span class="line">t2.<span class="built_in">sum</span>(axis=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通常把nan替换成均值mean</li>
+</ul>
+<h3 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h3><ul>
+<li>求和sum</li>
+<li>均值mean</li>
+<li>中值median</li>
+<li>最大值max</li>
+<li>最小值min</li>
+<li>极值ptp</li>
+<li>标准差std，越小越稳定</li>
+</ul>
+<blockquote>
+<p>通常指定一个轴axis=1或0</p>
+</blockquote>
+<h3 id="数组拼接"><a href="#数组拼接" class="headerlink" title="数组拼接"></a>数组拼接</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.vstack((t1,t2))<span class="comment"># 竖直拼接</span></span><br><span class="line">np.hstack((t1,t2))<span class="comment"># 水平拼接</span></span><br></pre></td></tr></table></figure>
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><ul>
+<li>创建全0数组：np.zeros((3,4))</li>
+<li>创建全1数组：np.ones((3,4))</li>
+<li>创建一个对角线为1的方阵：np.eye(3)</li>
+</ul>
+<p>a=b.copy是ab互不影响的赋值方法</p>
+<h3 id="随机数"><a href="#随机数" class="headerlink" title="随机数"></a>随机数</h3><p><img src="/images/20200301204322894.png" alt="img"></p>
+<h3 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h3><p>Numpy 可以读写磁盘上的文本数据或二进制数据。</p>
+<p>NumPy 为 ndarray 对象引入了一个简单的文件格式：<strong>npy</strong>。</p>
+<p>npy 文件用于存储重建 ndarray 所需的数据、图形、dtype 和其他信息。</p>
+<p>常用的 IO 函数有：</p>
+<ul>
+<li>load() 和 save() 函数是读写文件数组数据的两个主要函数，默认情况下，数组是以未压缩的原始二进制格式保存在扩展名为 .npy 的文件中。</li>
+<li>savez() 函数用于将多个数组写入文件，默认情况下，数组是以未压缩的原始二进制格式保存在扩展名为 .npz 的文件中。</li>
+<li>loadtxt() 和 savetxt() 函数处理正常的文本文件(.txt 等)</li>
+</ul>
+<h4 id="numpy-save"><a href="#numpy-save" class="headerlink" title="numpy.save"></a>numpy.save</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numpy.save(file, arr, allow_pickle&#x3D;True, fix_imports&#x3D;True)</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong>file</strong>：要保存的文件，扩展名为 .npy，如果文件路径末尾没有扩展名 .npy，该扩展名会被自动加上。</li>
+<li><strong>arr</strong>: 要保存的数组</li>
+<li><strong>allow_pickle</strong>: 可选，布尔值，允许使用 Python pickles 保存对象数组，Python 中的 pickle 用于在保存到磁盘文件或从磁盘文件读取之前，对对象进行序列化和反序列化。</li>
+<li><strong>fix_imports</strong>: 可选，为了方便 Pyhton2 中读取 Python3 保存的数据。</li>
+</ul>
+<h4 id="np-savez"><a href="#np-savez" class="headerlink" title="np.savez"></a>np.savez</h4><p>numpy.savez() 函数将多个数组保存到以 npz 为扩展名的文件中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numpy.savez(file, *args, **kwds)</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li><strong>file</strong>：要保存的文件，扩展名为 <strong>.npz</strong>，如果文件路径末尾没有扩展名 <strong>.npz</strong>，该扩展名会被自动加上。</li>
+<li><strong>args</strong>: 要保存的数组，可以使用关键字参数为数组起一个名字，非关键字参数传递的数组会自动起名为 <strong>arr_0</strong>, <strong>arr_1</strong>, …　。</li>
+<li><strong>kwds</strong>: 要保存的数组使用关键字名称。</li>
+</ul>
+<h4 id="savetxt"><a href="#savetxt" class="headerlink" title="savetxt()"></a>savetxt()</h4><p>savetxt() 函数是以简单的文本文件格式存储数据，对应的使用 loadtxt() 函数来获取数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.loadtxt(FILENAME, dtype&#x3D;int, delimiter&#x3D;&#39; &#39;)</span><br><span class="line">np.savetxt(FILENAME, a, fmt&#x3D;&quot;%d&quot;, delimiter&#x3D;&quot;,&quot;)</span><br></pre></td></tr></table></figure>
+<p>参数 delimiter 可以指定各种分隔符、针对特定列的转换器函数、需要跳过的行数等。</p>
+<h3 id="NumPy-字节交换"><a href="#NumPy-字节交换" class="headerlink" title="NumPy 字节交换"></a>NumPy 字节交换</h3><p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。字节顺序，是跨越多字节的程序对象的存储规则。</p>
+<ul>
+<li><strong>大端模式：</strong>指数据的高字节保存在内存的低地址中，而数据的低字节保存在内存的高地址中，这样的存储模式有点儿类似于把数据当作字符串顺序处理：地址由小向大增加，而数据从高位往低位放；这和我们的阅读习惯一致。</li>
+<li><strong>小端模式：</strong>指数据的高字节保存在内存的高地址中，而数据的低字节保存在内存的低地址中，这种存储模式将地址的高低和数据位权有效地结合起来，高地址部分权值高，低地址部分权值低。</li>
+</ul>
+<p>numpy.ndarray.byteswap() 函数将 ndarray 中每个元素中的字节进行大小端转换。</p>
+<h3 id="排序、条件刷选函数"><a href="#排序、条件刷选函数" class="headerlink" title="排序、条件刷选函数"></a>排序、条件刷选函数</h3><table>
+<thead>
+<tr>
+<th align="left">种类</th>
+<th align="left">速度</th>
+<th align="left">最坏情况</th>
+<th align="left">工作空间</th>
+<th align="left">稳定性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>&#39;quicksort&#39;</code>（快速排序）</td>
+<td align="left">1</td>
+<td align="left"><code>O(n^2)</code></td>
+<td align="left">0</td>
+<td align="left">否</td>
+</tr>
+<tr>
+<td align="left"><code>&#39;mergesort&#39;</code>（归并排序）</td>
+<td align="left">2</td>
+<td align="left"><code>O(n*log(n))</code></td>
+<td align="left">~n/2</td>
+<td align="left">是</td>
+</tr>
+<tr>
+<td align="left"><code>&#39;heapsort&#39;</code>（堆排序）</td>
+<td align="left">3</td>
+<td align="left"><code>O(n*log(n))</code></td>
+<td align="left">0</td>
+<td align="left">否</td>
+</tr>
+</tbody></table>
+<h4 id="numpy-sort"><a href="#numpy-sort" class="headerlink" title="numpy.sort()"></a>numpy.sort()</h4><p>numpy.sort() 函数返回输入数组的排序副本。函数格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numpy.sort(a, axis, kind, order)</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li>a: 要排序的数组</li>
+<li>axis: 沿着它排序数组的轴，如果没有数组会被展开，沿着最后的轴排序， axis=0 按列排序，axis=1 按行排序</li>
+<li>kind: 默认为’quicksort’（快速排序）</li>
+<li>order: 如果数组包含字段，则是要排序的字段</li>
+</ul>
+<h4 id="numpy-argsort"><a href="#numpy-argsort" class="headerlink" title="numpy.argsort()"></a>numpy.argsort()</h4><p>numpy.argsort() 函数返回的是数组值从小到大的索引值。</p>
+<h4 id="numpy-lexsort"><a href="#numpy-lexsort" class="headerlink" title="numpy.lexsort()"></a>numpy.lexsort()</h4><p>numpy.lexsort() 用于对多个序列进行排序。</p>
+<h4 id="numpy-extract"><a href="#numpy-extract" class="headerlink" title="numpy.extract()"></a>numpy.extract()</h4><p>numpy.extract() 函数根据某个条件从数组中抽取元素，返回满条件的元素。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/31/numpy/">展开全文 >></a>
         </p>
       
 
